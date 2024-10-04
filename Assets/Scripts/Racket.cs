@@ -6,11 +6,13 @@ public class Racket : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float speed;
+    private Animator anim;
     public string axis = "Vertical";
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -34,6 +36,14 @@ public class Racket : MonoBehaviour
         if (transform.position.y < -1f)
         {
             transform.position = new Vector2(transform.position.x, -1f);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ball")
+        {
+            anim.SetTrigger("Shoot");
         }
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - Racket Red
   - Goal 1
   - Racket Blue
+  - Ball
   layers:
   - Default
   - TransparentFX
