@@ -9,6 +9,9 @@ TagManager:
   - Goal 1
   - Racket Blue
   - Ball
+  - PowerUp
+  - Goal1
+  - Goal2
   layers:
   - Default
   - TransparentFX

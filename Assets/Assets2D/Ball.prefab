@@ -129,6 +129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   isBounce: 0
+  bonusGoal: 0
+  isLastHit1: 0
 --- !u!58 &2977868884328135477
 CircleCollider2D:
   m_ObjectHideFlags: 0
