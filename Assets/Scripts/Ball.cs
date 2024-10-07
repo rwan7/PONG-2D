@@ -39,6 +39,7 @@ public class Ball : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        SoundManager.instance.BallBounceSfx();
         if (col.gameObject.tag == "RacketRed" && !isBounce)
         {
             Vector2 dir = new Vector2(1, 0).normalized;
@@ -57,9 +58,9 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        
         if (col.gameObject.tag == "Goal1")
         {
+            SoundManager.instance.GoalSfx();
             GameManager.instance.player2Score++;
             Debug.Log("Player 2 Goal");
             if(bonusGoal)
@@ -68,10 +69,15 @@ public class Ball : MonoBehaviour
             }
             GameManager.instance.spawnBall();
             Destroy(gameObject);
+            if (GameManager.instance.goldenGoal)
+            {
+                GameManager.instance.GameOver();
+            }
         }
 
         if(col.gameObject.tag == "Goal2")
         {
+            SoundManager.instance.GoalSfx();
             GameManager.instance.player1Score++;
             Debug.Log("Player 1 Goal");
             if(bonusGoal)
@@ -80,6 +86,10 @@ public class Ball : MonoBehaviour
             }
             GameManager.instance.spawnBall();
             Destroy(gameObject);
+            if (GameManager.instance.goldenGoal)
+            {
+                GameManager.instance.GameOver();
+            }
         }
     }
 

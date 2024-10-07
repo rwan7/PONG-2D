@@ -8,6 +8,7 @@ public class GameData : MonoBehaviour
     public static GameData instance;
     public bool isSinglePlayer;
     public float gameTimer;
+    public string selectBall;
 
     private void Awake()
     {

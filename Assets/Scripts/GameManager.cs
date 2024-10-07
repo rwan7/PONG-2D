@@ -23,7 +23,10 @@ public class GameManager : MonoBehaviour
     public GameObject ballSpawned;
 
     [Header("Prefab")]
-    public GameObject ballPrefab;
+    public GameObject footballPrefab;
+    public GameObject basketballPrefab;
+    public GameObject volleyballPrefab;
+    private GameObject selectedBallPrefab;
     public GameObject[] powerUp;
 
     [Header("Panels")]
@@ -64,8 +67,6 @@ public class GameManager : MonoBehaviour
         player2WinUI.SetActive(false);
         youWin.SetActive(false);
         youLose.SetActive(false);
-
-        youLose.SetActive(false);
         goldenGoalUI.SetActive(false);
 
         timer = GameData.instance.gameTimer;
@@ -73,6 +74,22 @@ public class GameManager : MonoBehaviour
         goldenGoal = false;
 
         spawnBall();
+
+        switch (GameData.instance.selectBall)
+        {
+            case "football":
+                selectedBallPrefab = footballPrefab;
+                break;
+            case "basketball":
+                selectedBallPrefab = basketballPrefab;
+                break;
+            case "volleyball":
+                selectedBallPrefab = volleyballPrefab;
+                break;
+            default:
+                selectedBallPrefab = footballPrefab;
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -114,6 +131,10 @@ public class GameManager : MonoBehaviour
                     spawnBall();
                 }
             }
+            else
+            {
+                GameOver();
+            }
         }
     } 
 
@@ -131,30 +152,66 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
         pausePanel.SetActive(true);
+        SoundManager.instance.UIClickSfx();
     }
 
     public void resumeGame()
     {
         pausePanel.SetActive(false);
         Time.timeScale = 1;
+        SoundManager.instance.UIClickSfx();
     }
 
     public void backToMenu()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("1. Main Menu");
+        SoundManager.instance.UIClickSfx();
     }
 
     public void restart()
     {
         Time.timeScale = 1;
         SceneManager.LoadScene("2. Gameplay");
+        SoundManager.instance.UIClickSfx();
     }
-
+           
     public void spawnBall()
     {
         Debug.Log("Ball Spawned");
         StartCoroutine("DelaySpawn");
+    }
+
+    public void GameOver()
+    {
+        SoundManager.instance.GameOverSfx();
+        isOver = true;
+        Debug.Log("Game Over");
+        Time.timeScale = 0;
+
+        gameOverPanel.SetActive(true);
+        if (!GameData.instance.isSinglePlayer)
+        {
+            if (player1Score > player2Score)
+            {
+                player1WinUI.SetActive(true);
+            }
+            if (player1Score < player2Score)
+            {
+                player2WinUI.SetActive(true);
+            }
+        }
+        else
+        {
+            if (player1Score > player2Score)
+            {
+                youWin.SetActive(true);
+            }
+            if (player1Score < player2Score)
+            {
+                youLose.SetActive(true);
+            }
+        }
     }
 
     private IEnumerator DelaySpawn()
@@ -162,7 +219,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3);
         if (ballSpawned == null)
         {
-            ballSpawned = Instantiate(ballPrefab, Vector3.zero, Quaternion.identity);
+            ballSpawned = Instantiate(selectedBallPrefab, Vector3.zero, Quaternion.identity);
         }
     }
 }
